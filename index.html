@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dinner Party Invitation</title>
     <style>
-        /* Base styles */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -57,6 +56,14 @@
             word-wrap: break-word;
         }
 
+        .details p {
+            margin-bottom: 10px;
+        }
+
+        .details p:last-child {
+            margin-bottom: 0;
+        }
+
         .signature-section {
             margin-top: 40px;
             display: flex;
@@ -103,6 +110,7 @@
             font-size: 16px;
             display: inline-block;
             margin: 10px 0;
+            transition: background-color 0.3s ease;
         }
 
         .upload-button:hover {
@@ -130,6 +138,7 @@
             cursor: pointer;
             font-family: Arial, sans-serif;
             border: none;
+            transition: background-color 0.3s ease;
         }
 
         .download-button:hover {
@@ -227,25 +236,6 @@
             }
         }
     </style>
-    <script>
-        function handleSignatureUpload(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = document.getElementById('signatureImage');
-                    img.src = e.target.result;
-                    img.style.display = 'block';
-                    document.querySelector('.signature-line').style.display = 'none';
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function printInvitation() {
-            window.print();
-        }
-    </script>
 </head>
 <body>
     <div class="invitation-card">
@@ -272,17 +262,26 @@
             <div class="signature-section">
                 <div class="signature">
                     <div class="signature-upload">
-                        <label for="signatureInput" class="upload-button">Upload Signature</label>
-                        <input type="file" id="signatureInput" accept="image/*" onchange="handleSignatureUpload(event)">
+                        <label for="guestSignatureInput" class="upload-button">Upload Guest Signature</label>
+                        <input type="file" id="guestSignatureInput" accept="image/*" 
+                               onchange="handleSignatureUpload(event, 'guestSignatureImage', 'guestSignatureLine')">
                     </div>
-                    <div class="signature-line"></div>
-                    <img id="signatureImage" class="signature-image" style="display: none;" alt="Signature">
+                    <div id="guestSignatureLine" class="signature-line"></div>
+                    <img id="guestSignatureImage" class="signature-image" style="display: none;" alt="Guest Signature">
                     <p>Kimchan Sokpheng</p>
                     <p><em>Guest of Honor</em></p>
                 </div>
 
                 <div class="signature">
-                    <div class="signature-line"></div>
+                    <div class="signature-upload">
+                        <img id="hostSignatureImage" src="a.jpg"  alt="Host Signature">
+
+                        <!-- <label for="hostSignatureInput" class="upload-button">Upload Host Signature</label>
+                        <input type="file" id="hostSignatureInput" accept="image/*" 
+                               onchange="handleSignatureUpload(event, 'hostSignatureImage', 'hostSignatureLine')"> -->
+                    </div>
+                    <div id="hostSignatureLine" class="signature-line"></div>
+                    <img id="hostSignatureImage" class="signature-image" style="display: none;" alt="Host Signature">
                     <p>Ing Muyleang</p>
                     <p><em>Party Host</em></p>
                 </div>
@@ -295,5 +294,25 @@
     <div class="no-print">
         <button onclick="printInvitation()" class="download-button">Print Invitation</button>
     </div>
+
+    <script>
+        function handleSignatureUpload(event, signatureId, lineId) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById(signatureId);
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                    document.getElementById(lineId).style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function printInvitation() {
+            window.print();
+        }
+    </script>
 </body>
 </html>
