@@ -5,68 +5,123 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dinner Party Invitation</title>
     <style>
-        /* Regular styles */
+        /* Base styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             font-family: 'Georgia', serif;
             max-width: 800px;
-            margin: 40px auto;
+            margin: 0 auto;
             padding: 20px;
             background-color: #f8f5f2;
             color: #2c1810;
         }
+
         .invitation-card {
             background-color: white;
             padding: 40px;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             position: relative;
+            margin: 20px;
         }
+
         .header {
             text-align: center;
             border-bottom: 2px solid #d4af37;
             padding-bottom: 20px;
             margin-bottom: 30px;
         }
+
         .title {
             font-size: 32px;
             color: #8b4513;
             margin-bottom: 10px;
+            word-wrap: break-word;
         }
+
         .content {
             line-height: 1.6;
             font-size: 18px;
         }
+
         .details {
             margin: 30px 0;
             padding: 20px;
             background-color: #fff9f0;
             border-left: 4px solid #d4af37;
+            word-wrap: break-word;
         }
+
         .signature-section {
             margin-top: 40px;
             display: flex;
             justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
         }
+
         .signature {
             text-align: center;
             flex: 1;
+            min-width: 250px;
         }
+
         .signature-line {
-            width: 200px;
+            width: 100%;
+            max-width: 200px;
             border-top: 1px solid #2c1810;
             margin: 10px auto;
         }
+
         .ornament {
             font-size: 24px;
             color: #d4af37;
             text-align: center;
             margin: 20px 0;
         }
+
+        .signature-upload {
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .signature-upload input {
+            display: none;
+        }
+
+        .upload-button {
+            background-color: #d4af37;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            display: inline-block;
+            margin: 10px 0;
+        }
+
+        .upload-button:hover {
+            background-color: #b38f1d;
+        }
+
+        .signature-image {
+            max-width: 100%;
+            height: auto;
+            max-height: 100px;
+            margin: 10px auto;
+        }
+
         .download-button {
             display: block;
-            width: 200px;
+            width: 100%;
+            max-width: 200px;
             margin: 20px auto;
-            padding: 10px 20px;
+            padding: 12px 24px;
             background-color: #8b4513;
             color: white;
             text-align: center;
@@ -74,32 +129,98 @@
             text-decoration: none;
             cursor: pointer;
             font-family: Arial, sans-serif;
+            border: none;
         }
+
         .download-button:hover {
             background-color: #6b3410;
         }
-        .no-print {
-            margin-top: 20px;
+
+        /* Mobile Responsive Styles */
+        @media screen and (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .invitation-card {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            .title {
+                font-size: 24px;
+            }
+
+            .content {
+                font-size: 16px;
+            }
+
+            .details {
+                padding: 15px;
+                margin: 20px 0;
+            }
+
+            .signature-section {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .signature {
+                width: 100%;
+                margin: 15px 0;
+            }
+
+            .upload-button {
+                width: 100%;
+                max-width: 200px;
+            }
         }
 
-        /* Print-specific styles */
+        /* Small Mobile Devices */
+        @media screen and (max-width: 480px) {
+            .invitation-card {
+                padding: 15px;
+                margin: 5px;
+            }
+
+            .title {
+                font-size: 20px;
+            }
+
+            .content {
+                font-size: 14px;
+            }
+
+            .details {
+                padding: 10px;
+            }
+
+            .ornament {
+                font-size: 20px;
+            }
+        }
+
+        /* Print styles */
         @media print {
             body {
                 margin: 0;
                 padding: 0;
                 background: none;
             }
+            
             .invitation-card {
                 box-shadow: none;
                 padding: 20px;
-                width: 210mm; /* A4 width */
-                height: 297mm; /* A4 height */
+                width: 210mm;
+                height: 297mm;
                 margin: 0;
                 border-radius: 0;
             }
-            .no-print {
+
+            .no-print, .signature-upload label, .upload-button {
                 display: none !important;
             }
+
             @page {
                 size: A4;
                 margin: 20mm;
@@ -107,6 +228,20 @@
         }
     </style>
     <script>
+        function handleSignatureUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById('signatureImage');
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                    document.querySelector('.signature-line').style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
         function printInvitation() {
             window.print();
         }
@@ -136,7 +271,12 @@
 
             <div class="signature-section">
                 <div class="signature">
+                    <div class="signature-upload">
+                        <label for="signatureInput" class="upload-button">Upload Signature</label>
+                        <input type="file" id="signatureInput" accept="image/*" onchange="handleSignatureUpload(event)">
+                    </div>
                     <div class="signature-line"></div>
+                    <img id="signatureImage" class="signature-image" style="display: none;" alt="Signature">
                     <p>Kimchan Sokpheng</p>
                     <p><em>Guest of Honor</em></p>
                 </div>
