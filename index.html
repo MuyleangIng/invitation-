@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dinner Party Invitation</title>
     <style>
+        /* Regular styles */
         body {
             font-family: 'Georgia', serif;
             max-width: 800px;
@@ -61,7 +62,55 @@
             text-align: center;
             margin: 20px 0;
         }
+        .download-button {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #8b4513;
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+        }
+        .download-button:hover {
+            background-color: #6b3410;
+        }
+        .no-print {
+            margin-top: 20px;
+        }
+
+        /* Print-specific styles */
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+                background: none;
+            }
+            .invitation-card {
+                box-shadow: none;
+                padding: 20px;
+                width: 210mm; /* A4 width */
+                height: 297mm; /* A4 height */
+                margin: 0;
+                border-radius: 0;
+            }
+            .no-print {
+                display: none !important;
+            }
+            @page {
+                size: A4;
+                margin: 20mm;
+            }
+        }
     </style>
+    <script>
+        function printInvitation() {
+            window.print();
+        }
+    </script>
 </head>
 <body>
     <div class="invitation-card">
@@ -79,9 +128,7 @@
                 <p><strong>Guest of Honor:</strong> Kimchan Sokpheng</p>
                 <p><strong>Date:</strong> 16-Dec-2024 </p>
                 <p><strong>Time:</strong> 9:00PM</p>
-                <p><strong>Location:</strong> No. 24, Street 562,Sangkat Boeung
-                    Kak I,Khan Toul Kork,Phnom Penh,
-                    Cambodia </p>
+                <p><strong>Location:</strong> No. 24, Street 562, Sangkat Boeung Kak I, Khan Toul Kork, Phnom Penh, Cambodia </p>
                 <p><strong>Special Notes:</strong> Overnight accommodations will be provided</p>
             </div>
 
@@ -103,6 +150,10 @@
 
             <div class="ornament">✧ ✦ ✧</div>
         </div>
+    </div>
+    
+    <div class="no-print">
+        <button onclick="printInvitation()" class="download-button">Print Invitation</button>
     </div>
 </body>
 </html>
